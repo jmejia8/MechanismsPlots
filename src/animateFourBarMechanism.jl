@@ -57,12 +57,47 @@ function generateTrayectory(p, nframes=30)
 end
 
 function animate(p; precision_points=nothing,
-                                    xlimits=(-60, 60),
-                                    ylimits=(-60, 60),
+                                    xlimits=nothing,
+                                    ylimits=nothing,
                                     title="Four-Bar Mechanism",
                                     nframes=50)
 
     C, X0, X1, X2, X3 = generateTrayectory(p, nframes)
+
+    if xlimits == nothing
+        xmin = min( minimum(C[:, 1]), minimum(X0[:, 1]), minimum(X1[:, 1]), minimum(X2[:, 1]), minimum(X3[:, 1]), )
+        xmax = max( maximum(C[:, 1]), maximum(X0[:, 1]), maximum(X1[:, 1]), maximum(X2[:, 1]), maximum(X3[:, 1]), )
+    else
+        xmin, xmax = xlimits
+    end
+
+    if ylimits == nothing
+        ymin = min( minimum(C[:, 2]), minimum(X0[:, 2]), minimum(X1[:, 2]), minimum(X2[:, 2]), minimum(X3[:, 2]), )
+        ymax = max( maximum(C[:, 2]), maximum(X0[:, 2]), maximum(X1[:, 2]), maximum(X2[:, 2]), maximum(X3[:, 2]), )
+
+    else
+        ymin, ymax = ylimits
+    end
+
+    if xlimits == nothing && xlimits == nothing
+        nx = xmax - xmin
+        ny = ymax - ymin
+
+        if nx < ny
+            offset = (ny - nx) / 2.0
+            xmin -= offset
+            xmax += offset 
+        elseif nx > ny
+            offset = abs(ny - nx) / 2.0
+            ymin -= offset
+            ymax += offset 
+        end
+
+        xlimits = [xmin, xmax]
+        ylimits = [ymin, ymax]
+
+
+    end
 
     anim = @animate for t = 1:nframes
         plot(title=title, xlimits=xlimits, ylimits=ylimits)
