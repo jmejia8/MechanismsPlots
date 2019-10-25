@@ -79,29 +79,27 @@ function animate(p; precision_points=nothing,
         ymin, ymax = ylimits
     end
 
-    if xlimits == nothing && xlimits == nothing
-        nx = xmax - xmin
-        ny = ymax - ymin
+    nx = xmax - xmin
+    ny = ymax - ymin
 
-        if nx < ny
-            offset = (ny - nx) / 2.0
-            xmin -= offset
-            xmax += offset 
-        elseif nx > ny
-            offset = abs(ny - nx) / 2.0
-            ymin -= offset
-            ymax += offset 
-        end
-
-        xlimits = [xmin, xmax]
-        ylimits = [ymin, ymax]
-
-
+    if xlimits == nothing && nx < ny
+        offset = (ny - nx) / 2.0
+        xmin -= offset
+        xmax += offset 
+    end
+    if ylimits == nothing && nx > ny
+        offset = abs(ny - nx) / 2.0
+        ymin -= offset
+        ymax += offset 
     end
 
+    xlimits = [xmin, xmax]
+    ylimits = [ymin, ymax]
+
+
     anim = @animate for t = 1:nframes
-        plot(title=title, xlimits=xlimits, ylimits=ylimits)
-        plot!(C[:,1], C[:,2], linestyle=:dot, linecolor=:green)
+        # plot()
+        plot(C[:,1], C[:,2], linestyle=:dot, linecolor=:green, title=title, xlimits=xlimits, ylimits=ylimits)
 
         if precision_points != nothing
             scatter!(precision_points[:,1], precision_points[:,2], markersize=1)
