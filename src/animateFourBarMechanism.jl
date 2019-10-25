@@ -102,7 +102,7 @@ function animate(p; precision_points=nothing,
         plot(C[:,1], C[:,2], linestyle=:dot, linecolor=:green, title=title, xlimits=xlimits, ylimits=ylimits)
 
         if precision_points != nothing
-            scatter!(precision_points[:,1], precision_points[:,2], markersize=1)
+            scatter!(precision_points[:,1], precision_points[:,2], markercolor=:black, markershape=:star5)
         end
         
         scatter!(X0[t, 1:1], X0[t, 2:2])
